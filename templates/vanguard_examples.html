@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} - VANGUARD Security Report</title>
+    <style>
+        /* VANGUARD Modern Report Styling */
+        :root {
+            --primary-color: #ff4757;
+            --secondary-color: #2ed573;
+            --warning-color: #ffa726;
+            --danger-color: #e74c3c;
+            --info-color: #3498db;
+            --dark-bg: #2c3e50;
+            --light-bg: #ecf0f1;
+            --text-primary: #2c3e50;
+            --text-secondary: #7f8c8d;
+            --border-color: #bdc3c7;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header Styling */
+        .report-header {
+            background: linear-gradient(135deg, var(--primary-color), #ff3742);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px 15px 0 0;
+            box-shadow: 0 8px 32px rgba(255, 71, 87, 0.3);
+            margin-bottom: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .report-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="white" opacity="0.1"/></svg>') repeat;
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateX(-50px) translateY(-50px); }
+            100% { transform: translateX(50px) translateY(50px); }
+        }
+
+        .report-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 2;
+        }
+
+        .report-header .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 2;
+        }
+
+        .report-header .generated-info {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            text-align: right;
+            font-size: 0.9rem;
+            opacity: 0.8;
+            z-index: 2;
+        }
+
+        /* Metrics Dashboard */
+        .metrics-dashboard {
+            background: white;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            border-radius: 0 0 15px 15px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .metric-card {
+            text-align: center;
+            padding: 1.5rem;
+            border-radius: 12px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+
+        .metric-card.critical {
+            background: linear-gradient(135deg, #ff4757, #ff3742);
+            color: white;
+            border-color: var(--danger-color);
+        }
+
+        .metric-card.high {
+            background: linear-gradient(135deg, #ffa726, #ff9800);
+            color: white;
+        }
+
+        .metric-card.medium {
+            background: linear-gradient(135deg, #f1c40f, #f39c12);
+            color: white;
+        }
+
+        .metric-card.low {
+            background: linear-gradient(135deg, #2ed573, #27ae60);
+            color: white;
+        }
+
+        .metric-card.info {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Executive Summary */
+        .executive-summary {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            border-left: 5px solid var(--info-color);
+        }
+
+        .executive-summary h2 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .executive-summary h2::before {
+            content: "📊";
+            font-size: 1.5rem;
+        }
+
+        /* Risk Assessment */
+        .risk-assessment {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .risk-level {
+            font-size: 1.5rem;
+            font-weight: 700;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            display: inline-block;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .risk-level.critical {
+            background: var(--danger-color);
+            animation: pulse-red 2s infinite;
+        }
+
+        .risk-level.high {
+            background: var(--warning-color);
+        }
+
+        .risk-level.medium {
+            background: #f1c40f;
+            color: #2c3e50;
+        }
+
+        .risk-level.low {
+            background: var(--secondary-color);
+        }
+
+        @keyframes pulse-red {
+            0%, 100% { box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4); }
+            50% { box-shadow: 0 4px 25px rgba(231, 76, 60, 0.8); }
+        }
+
+        /* Findings Section */
+        .findings-section {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-title::before {
+            content: "🎯";
+            font-size: 1.5rem;
+        }
+
+        .finding-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            border-left: 5px solid var(--border-color);
+        }
+
+        .finding-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+
+        .finding-card.severity-critical {
+            border-left-color: var(--danger-color);
+        }
+
+        .finding-card.severity-high {
+            border-left-color: var(--warning-color);
+        }
+
+        .finding-card.severity-medium {
+            border-left-color: #f1c40f;
+        }
+
+        .finding-card.severity-low {
+            border-left-color: var(--secondary-color);
+        }
+
+        .finding-header {
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .finding-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .finding-meta {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .meta-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .meta-badge.status {
+            background: var(--info-color);
+            color: white;
+        }
+
+        .meta-badge.server {
+            background: var(--text-secondary);
+            color: white;
+        }
+
+        .vulnerability-details {
+            padding: 2rem;
+        }
+
+        .vuln-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .vuln-type {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .severity-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .severity-badge.critical {
+            background: var(--danger-color);
+            color: white;
+        }
+
+        .severity-badge.high {
+            background: var(--warning-color);
+            color: white;
+        }
+
+        .severity-badge.medium {
+            background: #f1c40f;
+            color: var(--text-primary);
+        }
+
+        .severity-badge.low {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        .cvss-score {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .description {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 2rem;
+            color: var(--text-primary);
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .detail-section {
+            background: var(--light-bg);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        .detail-section h4 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .code-block {
+            background: var(--dark-bg);
+            color: #ecf0f1;
+            padding: 1.5rem;
+            border-radius: 8px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            overflow-x: auto;
+            margin: 1rem 0;
+            border: 1px solid #34495e;
+        }
+
+        .code-block .comment {
+            color: #95a5a6;
+            font-style: italic;
+        }
+
+        .code-block .string {
+            color: #e74c3c;
+        }
+
+        .code-block .keyword {
+            color: #3498db;
+            font-weight: bold;
+        }
+
+        /* CVE Section */
+        .cve-list {
+            margin: 1.5rem 0;
+        }
+
+        .cve-item {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .cve-item:hover {
+            border-color: var(--primary-color);
+            box-shadow: 0 4px 15px rgba(255, 71, 87, 0.1);
+        }
+
+        .cve-id {
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+        }
+
+        .cve-description {
+            margin: 0.5rem 0;
+            color: var(--text-primary);
+        }
+
+        .cve-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Remediation Section */
+        .remediation-section {
+            background: linear-gradient(135deg, #e8f5e8, #d4edda);
+            border: 1px solid var(--secondary-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .remediation-section h4 {
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .remediation-section h4::before {
+            content: "🛠️";
+            font-size: 1.2rem;
+        }
+
+        .remediation-list {
+            list-style: none;
+            counter-reset: step-counter;
+        }
+
+        .remediation-list li {
+            counter-increment: step-counter;
+            margin-bottom: 1rem;
+            padding-left: 3rem;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .remediation-list li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            background: var(--secondary-color);
+            color: white;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        /* Footer */
+        .report-footer {
+            background: var(--dark-bg);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .footer-info {
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .report-header {
+                padding: 1.5rem;
+            }
+            
+            .report-header h1 {
+                font-size: 2rem;
+            }
+            
+            .metrics-dashboard {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 1rem;
+                padding: 1.5rem;
+            }
+            
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .vuln-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+            }
+            
+            .finding-card {
+                break-inside: avoid;
+                box-shadow: none;
+                border: 1px solid var(--border-color);
+            }
+            
+            .report-header {
+                background: var(--primary-color) !important;
+                -webkit-print-color-adjust: exact;
+                color-adjust: exact;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Report Header -->
+        <header class="report-header">
+            <div class="generated-info">
+                <div>Generated: {{ generation_date }}</div>
+                <div>Author: {{ author }}</div>
+            </div>
+            <h1>{{ title }}</h1>
+            <p class="subtitle">Comprehensive Security Analysis Report</p>
+        </header>
+
+        <!-- Metrics Dashboard -->
+        <section class="metrics-dashboard">
+            <div class="metric-card info">
+                <span class="metric-value">{{ findings|length }}</span>
+                <span class="metric-label">Total Targets</span>
+            </div>
+            <div class="metric-card critical">
+                <span class="metric-value">{{ severity_counts.Critical|default(0) }}</span>
+                <span class="metric-label">Critical</span>
+            </div>
+            <div class="metric-card high">
+                <span class="metric-value">{{ severity_counts.High|default(0) }}</span>
+                <span class="metric-label">High Risk</span>
+            </div>
+            <div class="metric-card medium">
+                <span class="metric-value">{{ severity_counts.Medium|default(0) }}</span>
+                <span class="metric-label">Medium Risk</span>
+            </div>
+            <div class="metric-card low">
+                <span class="metric-value">{{ severity_counts.Low|default(0) }}</span>
+                <span class="metric-label">Low Risk</span>
+            </div>
+        </section>
+
+        <!-- Executive Summary -->
+        <section class="executive-summary">
+            <h2>Executive Summary</h2>
+            <p>This comprehensive security assessment analyzed <strong>{{ findings|length }}</strong> target systems and identified multiple security vulnerabilities requiring immediate attention. The assessment revealed a total of <strong>{{ total_vulnerabilities|default(0) }}</strong> security issues across the tested infrastructure.</p>
+            
+            <div class="risk-assessment">
+                <h3>Overall Risk Assessment</h3>
+                {% set total_score = (severity_counts.Critical|default(0) * 4 + severity_counts.High|default(0) * 3 + severity_counts.Medium|default(0) * 2 + severity_counts.Low|default(0) * 1) %}
+                {% set avg_score = total_score / total_vulnerabilities if total_vulnerabilities > 0 else 0 %}
+                {% if avg_score >= 3 %}
+                    <span class="risk-level critical">🚨 Critical Risk</span>
+                {% elif avg_score >= 2 %}
+                    <span class="risk-level high">⚠️ High Risk</span>
+                {% elif avg_score >= 1 %}
+                    <span class="risk-level medium">📊 Medium Risk</span>
+                {% else %}
+                    <span class="risk-level low">✅ Low Risk</span>
+                {% endif %}
+            </div>
+        </section>
+
+        <!-- Findings Section -->
+        <section class="findings-section">
+            <h2 class="section-title">Detailed Findings</h2>
+            
+            {% for finding in findings %}
+            <article class="finding-card severity-{{ finding.vulnerabilities[0].severity.rating|lower }}">
+                <header class="finding-header">
+                    <h3 class="finding-title">{{ finding.url }}</h3>
+                    <div class="finding-meta">
+                        <span class="meta-badge status">Status: {{ finding.status_code }}</span>
+                        <span class="meta-badge server">{{ finding.server|default('Unknown Server') }}</span>
+                    </div>
+                </header>
+
+                {% for vuln in finding.vulnerabilities %}
+                <div class="vulnerability-details">
+                    <div class="vuln-header">
+                        <div class="vuln-type">{{ vuln.type }}</div>
+                        <div>
+                            <span class="severity-badge {{ vuln.severity.rating|lower }}">
+                                {{ vuln.severity.rating }}
+                            </span>
+                            <span class="cvss-score">CVSS: {{ vuln.severity.cvss_score }}</span>
+                        </div>
+                    </div>
+
+                    <p class="description">{{ vuln.description }}</p>
+
+                    <div class="details-grid">
+                        <div class="detail-section">
+                            <h4>🔍 Technical Details</h4>
+                            <div class="code-block">{{ vuln.technical_details|to_json }}</div>
+                        </div>
+
+                        <div class="detail-section">
+                            <h4>💻 Proof of Concept</h4>
+                            <div class="code-block">{{ vuln.proof_of_concept }}</div>
+                        </div>
+                    </div>
+
+                    {% if vuln.potential_cves %}
+                    <div class="detail-section">
+                        <h4>🔗 Related CVEs</h4>
+                        <div class="cve-list">
+                            {% for cve in vuln.potential_cves %}
+                            <div class="cve-item">
+                                <div class="cve-id">{{ cve.cve_id }}</div>
+                                <div class="cve-description">{{ cve.description }}</div>
+                                <div class="cve-meta">
+                                    <span>Severity: {{ cve.severity }}</span>
+                                    <span>CVSS: {{ cve.cvss_score }}</span>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <div class="remediation-section">
+                        <h4>Remediation Recommendations</h4>
+                        <ol class="remediation-list">
+                            {% for step in vuln.remediation %}
+                            <li>{{ step }}</li>
+                            {% endfor %}
+                        </ol>
+                    </div>
+                </div>
+                {% endfor %}
+            </article>
+            {% endfor %}
+        </section>
+
+        <!-- Report Footer -->
+        <footer class="report-footer">
+            <div class="footer-logo">VANGUARD</div>
+            <div class="footer-info">
+                <p>This report was generated using VANGUARD - Advanced Vulnerability Analytics Framework</p>
+                <p>© {{ current_year }} VANGUARD Security Team | For authorized security testing only</p>
+                <p><strong>Confidential:</strong> This report contains sensitive security information and should be handled accordingly.</p>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

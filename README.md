@@ -496,9 +496,9 @@ git push origin feature/awesome-new-feature
 
 <div align="center">
 
-[![Discord](https://img.shields.io/badge/Discord-Join%20Server-7289da?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/vanguard-security)
+[![Discord](https://img.shields.io/badge/Discord-Join%20Server-7289da?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/kami7nari)
 [![Twitter](https://img.shields.io/badge/Twitter-Follow-1da1f2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/VanguardSec)
-[![Telegram](https://img.shields.io/badge/Telegram-Join-0088cc?style=for-the-badge&logo=telegram&logoColor=white)](https://t.me/vanguard_security)
+[![Telegram](https://img.shields.io/badge/Telegram-Join-0088cc?style=for-the-badge&logo=telegram&logoColor=white)](https://t.me/Ghiddra)
 
 </div>
 
